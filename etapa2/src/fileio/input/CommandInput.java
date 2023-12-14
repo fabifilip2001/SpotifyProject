@@ -1,5 +1,8 @@
 package fileio.input;
 
+import java.util.Date;
+import java.util.List;
+
 public final class CommandInput {
     private String command;
     private String username;
@@ -11,6 +14,18 @@ public final class CommandInput {
     private Integer playlistId; // pentru add/remove song
     private String playlistName; // pentru create playlist
     private Integer seed; // pentru shuffle
+    private Integer age; // pentru addUser
+    private String city; // pentru addUser
+
+    private String name; // pentru addAlbum
+    private Integer releaseYear; // pentru addAlbum
+    private String description; // pentru addAlbum
+    private List<SongInput> songs; // songs urile unui album
+    private String date;
+    private Integer price;
+    private List<EpisodeInput> episodes;
+    private String nextPage;
+
 
     public CommandInput() {
     }
@@ -94,6 +109,86 @@ public final class CommandInput {
         this.seed = seed;
     }
 
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getReleaseYear() {
+        return releaseYear;
+    }
+
+    public void setReleaseYear(Integer releaseYear) {
+        this.releaseYear = releaseYear;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<SongInput> getSongs() {
+        return songs;
+    }
+
+    public void setSongs(List<SongInput> songs) {
+        this.songs = songs;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public List<EpisodeInput> getEpisodes() {
+        return episodes;
+    }
+
+    public void setEpisodes(List<EpisodeInput> episodes) {
+        this.episodes = episodes;
+    }
+
+    public String getNextPage() {
+        return nextPage;
+    }
+
+    public void setNextPage(String nextPage) {
+        this.nextPage = nextPage;
+    }
+
     @Override
     public String toString() {
         return "CommandInput{" +
@@ -107,6 +202,8 @@ public final class CommandInput {
                 ", playlistId=" + playlistId +
                 ", playlistName='" + playlistName + '\'' +
                 ", seed=" + seed +
+                ", age=" + age +
+                ", city='" + city + '\'' +
                 '}';
     }
 }

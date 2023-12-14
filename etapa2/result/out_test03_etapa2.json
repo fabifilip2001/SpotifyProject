@@ -1,0 +1,128 @@
+[ {
+  "command" : "addUser",
+  "user" : "melodymaster",
+  "timestamp" : 5,
+  "message" : "The username melodymaster has been added successfully."
+}, {
+  "command" : "addUser",
+  "user" : "rhythmrider",
+  "timestamp" : 10,
+  "message" : "The username rhythmrider has been added successfully."
+}, {
+  "command" : "addUser",
+  "user" : "beatblazer",
+  "timestamp" : 15,
+  "message" : "The username beatblazer has been added successfully."
+}, {
+  "command" : "addUser",
+  "user" : "harmonichero",
+  "timestamp" : 20,
+  "message" : "The username harmonichero has been added successfully."
+}, {
+  "command" : "getOnlineUsers",
+  "timestamp" : 25,
+  "result" : [ "alice22", "bob35", "carol19", "david27", "emily30", "frank21", "grace25", "henry26", "irene33", "jack29" ]
+}, {
+  "command" : "addAlbum",
+  "user" : "melodymaster",
+  "timestamp" : 35,
+  "message" : "melodymaster has added new album successfully."
+}, {
+  "command" : "showAlbums",
+  "user" : "beatblazer",
+  "timestamp" : 40,
+  "result" : [ ]
+}, {
+  "command" : "addEvent",
+  "message" : "melodymaster has added new event successfully.",
+  "user" : "melodymaster",
+  "timestamp" : 45
+}, {
+  "command" : "addEvent",
+  "message" : "melodymaster has added new event successfully.",
+  "user" : "melodymaster",
+  "timestamp" : 50
+}, {
+  "command" : "addEvent",
+  "message" : "The username alice23 doesn't exist.",
+  "user" : "alice23",
+  "timestamp" : 55
+}, {
+  "command" : "addEvent",
+  "message" : "bob35 is not an artist.",
+  "user" : "bob35",
+  "timestamp" : 60
+}, {
+  "command" : "search",
+  "user" : "alice22",
+  "timestamp" : 65,
+  "message" : "Search returned 1 results",
+  "results" : [ "melodymaster" ]
+}, {
+  "command" : "select",
+  "user" : "alice22",
+  "timestamp" : 70,
+  "message" : "Successfully selected melodymaster's page."
+}, {
+  "user" : "alice22",
+  "command" : "printCurrentPage",
+  "timestamp" : 75,
+  "message" : "Albums:\n\t[Harmonic Horizons]\n\nMerch:\n\t[]\n\nEvents:\n\t[Harmonic Convergence - 15-06-2022:\n\tA night of mesmerizing melodies and soundscapes., Echoes of the Future - 23-09-2022:\n\tExploring futuristic sounds in a live performance.]"
+}, {
+  "command" : "addMerch",
+  "message" : "melodymaster has added new merchandise successfully.",
+  "timestamp" : 80,
+  "user" : "melodymaster"
+}, {
+  "command" : "addMerch",
+  "message" : "melodymaster has added new merchandise successfully.",
+  "timestamp" : 85,
+  "user" : "melodymaster"
+}, {
+  "command" : "switchConnectionStatus",
+  "user" : "alice22",
+  "timestamp" : 87,
+  "message" : "alice22 has changed status successfully."
+}, {
+  "command" : "addMerch",
+  "message" : "Price for merchandise can not be negative.",
+  "timestamp" : 90,
+  "user" : "melodymaster"
+}, {
+  "command" : "addMerch",
+  "message" : "The username Melodic Hoodie doesn't exist.",
+  "timestamp" : 95,
+  "user" : "Melodic Hoodie"
+}, {
+  "command" : "addMerch",
+  "message" : "melodymaster has merchandise with the same name.",
+  "timestamp" : 100,
+  "user" : "melodymaster"
+}, {
+  "command" : "search",
+  "user" : "alice22",
+  "timestamp" : 105,
+  "message" : "alice22 is offline.",
+  "results" : [ ]
+}, {
+  "command" : "search",
+  "user" : "bob35",
+  "timestamp" : 105,
+  "message" : "Search returned 1 results",
+  "results" : [ "melodymaster" ]
+}, {
+  "command" : "select",
+  "user" : "bob35",
+  "timestamp" : 110,
+  "message" : "Successfully selected melodymaster's page."
+}, {
+  "user" : "alice22",
+  "command" : "printCurrentPage",
+  "timestamp" : 115,
+  "message" : "alice22 is offline."
+}, {
+  "user" : "bob35",
+  "command" : "printCurrentPage",
+  "timestamp" : 120,
+  "message" : "Albums:\n\t[Harmonic Horizons]\n\nMerch:\n\t[Harmonic T-Shirt - 25:\n\tLimited edition T-shirt featuring unique harmonic designs., Echoes Cap - 20:\n\tStylish cap with the 'Echoes of Harmony' album artwork.]\n\nEvents:\n\t[Harmonic Convergence - 15-06-2022:\n\tA night of mesmerizing melodies and soundscapes., Echoes of the Future - 23-09-2022:\n\tExploring futuristic sounds in a live performance.]"
+} ]

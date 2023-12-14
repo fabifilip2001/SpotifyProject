@@ -1,20 +1,28 @@
 package app.user;
 
+import app.Admin;
 import app.audio.Collections.AudioCollection;
 import app.audio.Collections.Playlist;
 import app.audio.Collections.PlaylistOutput;
 import app.audio.Files.AudioFile;
 import app.audio.Files.Song;
 import app.audio.LibraryEntry;
+import app.page.system.Page;
+import app.page.system.PageUtils;
+import app.page.system.userPages.HomePage;
+import app.page.system.userPages.LikedContentPage;
+import app.page.system.userPages.UserPage;
 import app.player.Player;
 import app.player.PlayerStats;
 import app.searchBar.Filters;
 import app.searchBar.SearchBar;
 import app.utils.Enums;
+import fileio.input.CommandInput;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class User {
     @Getter
@@ -29,9 +37,13 @@ public class User {
     private ArrayList<Song> likedSongs;
     @Getter
     private ArrayList<Playlist> followedPlaylists;
+    @Getter
     private final Player player;
     private final SearchBar searchBar;
     private boolean lastSearched;
+    @Getter
+    private Enums.UserConnectionStatus connectionStatus;
+    private Page page;
 
     public User(String username, int age, String city) {
         this.username = username;
@@ -43,18 +55,47 @@ public class User {
         player = new Player();
         searchBar = new SearchBar(username);
         lastSearched = false;
+        connectionStatus = Enums.UserConnectionStatus.ONLINE;
+//        LikedContentPage likedContentPage = new LikedContentPage(this,
+//                PageUtils.getPlaylists(followedPlaylists), likedSongs);
+        page = new HomePage(this,
+                new ArrayList<>(PageUtils.mostLikedFollowedPlaylists(followedPlaylists)),
+                new ArrayList<>(PageUtils.bestLikedSongs(likedSongs)));;
+    }
+
+    public boolean matchesUsername(String name) {
+        return getUsername().toLowerCase().startsWith(name.toLowerCase());
+    }
+
+    public void setPage(Page page) {
+        this.page = page;
     }
 
     public ArrayList<String> search(Filters filters, String type) {
-        searchBar.clearSelection();
-        player.stop();
-
-        lastSearched = true;
         ArrayList<String> results = new ArrayList<>();
-        List<LibraryEntry> libraryEntries = searchBar.search(filters, type);
 
-        for (LibraryEntry libraryEntry : libraryEntries) {
-            results.add(libraryEntry.getName());
+        if (!isOffline()) {
+            searchBar.clearSelection();
+            player.stop();
+
+            lastSearched = true;
+            switch (type) {
+                case ("artist"):
+                case ("host"):
+                    List<User> users = searchBar.searchUser(filters, type);
+                    for (User user : users) {
+                        results.add(user.getUsername());
+                    }
+                    break;
+
+                default:
+                    List<LibraryEntry> libraryEntries = searchBar.search(filters, type);
+
+                    for (LibraryEntry libraryEntry : libraryEntries) {
+                        results.add(libraryEntry.getName());
+                    }
+                    break;
+            }
         }
         return results;
     }
@@ -65,12 +106,24 @@ public class User {
 
         lastSearched = false;
 
-        LibraryEntry selected = searchBar.select(itemNumber);
+        switch (searchBar.getLastSearchType()) {
+            case ("artist"):
+            case ("host"):
+                User selectedUser = searchBar.selectUser(itemNumber);
 
-        if (selected == null)
-            return "The selected ID is too high.";
+                if (selectedUser == null)
+                    return "The selected ID is too high.";
 
-        return "Successfully selected %s.".formatted(selected.getName());
+                page = selectedUser.getPage();
+                return "Successfully selected %s's page.".formatted(selectedUser.getUsername());
+            default:
+                LibraryEntry selected = searchBar.select(itemNumber);
+
+                if (selected == null)
+                    return "The selected ID is too high.";
+
+                return "Successfully selected %s.".formatted(selected.getName());
+        }
     }
 
     public String load() {
@@ -123,8 +176,8 @@ public class User {
         if (player.getCurrentAudioFile() == null)
             return "Please load a source before using the shuffle function.";
 
-        if (!player.getType().equals("playlist"))
-            return "The loaded source is not a playlist.";
+        if (!player.getType().equals("playlist") && !player.getType().equals("album"))
+            return "The loaded source is not a playlist or an album.";
 
         player.shuffle(seed);
 
@@ -158,6 +211,9 @@ public class User {
     }
 
     public String like() {
+        if (isOffline())
+            return "%s is offline.".formatted(username);
+
         if (player.getCurrentAudioFile() == null)
             return "Please load a source before liking or unliking.";
 
@@ -168,12 +224,14 @@ public class User {
 
         if (likedSongs.contains(song)) {
             likedSongs.remove(song);
+            page.updateLikedSongs(likedSongs);
             song.dislike();
 
             return "Unlike registered successfully.";
         }
 
         likedSongs.add(song);
+        page.updateLikedSongs(likedSongs);
         song.like();
         return "Like registered successfully.";
     }
@@ -269,12 +327,14 @@ public class User {
 
         if (followedPlaylists.contains(playlist)) {
             followedPlaylists.remove(playlist);
+            page.updateAudioCollection(PageUtils.getPlaylists(followedPlaylists));
             playlist.decreaseFollowers();
 
             return "Playlist unfollowed successfully.";
         }
 
         followedPlaylists.add(playlist);
+        page.updateAudioCollection(PageUtils.getPlaylists(followedPlaylists));
         playlist.increaseFollowers();
 
 
@@ -317,6 +377,54 @@ public class User {
         return "This user's preferred genre is %s.".formatted(preferredGenre);
     }
 
+    public String switchConnectionStatus() {
+        if (!Admin.checkIfUserExists(username))
+            return "The username %s doesn't exist.".formatted(username);
+
+        if (Admin.getUser(username) == null)
+            return "%s is not a normal user.".formatted(username);
+
+        connectionStatus = connectionStatus == Enums.UserConnectionStatus.OFFLINE
+                ? Enums.UserConnectionStatus.ONLINE : Enums.UserConnectionStatus.OFFLINE;
+        return "%s has changed status successfully.".formatted(username);
+    }
+    public void removeFromLikedSongs(Song song) {
+        getLikedSongs().remove(song);
+        page.updateLikedSongs(getLikedSongs());
+    }
+    public String printCurrentPage() {
+        if (isOffline())
+            return "%s is offline.".formatted(username);
+
+        return page.print();
+    }
+    public String changePage(CommandInput commandInput) {
+        String username = commandInput.getUsername();
+        String pageName = commandInput.getNextPage();
+
+        switch (pageName) {
+            case ("Home") -> {
+                HomePage page = new HomePage(this, PageUtils.getPlaylists(followedPlaylists),
+                        getLikedSongs());
+                this.setPage(page);
+            }
+
+            case "LikedContent" -> {
+                LikedContentPage page = new LikedContentPage(this,
+                        PageUtils.getPlaylists(this.followedPlaylists), this.likedSongs);
+                this.setPage(page);
+            }
+
+            default -> "%s is trying to access a non-existent page.".formatted(username);
+        }
+        return "%s accessed %s successfully.".formatted(username, pageName);
+    }
+    public Page getPage() {
+        return this.page;
+    }
+    public boolean isOffline() {
+        return getConnectionStatus().equals(Enums.UserConnectionStatus.OFFLINE);
+    }
     public void simulateTime(int time) {
         player.simulatePlayer(time);
     }

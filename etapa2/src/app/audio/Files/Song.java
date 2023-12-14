@@ -84,4 +84,16 @@ public final class Song extends AudioFile {
     public void dislike() {
         likes--;
     }
+
+    public String likedContentPagePrint() {
+        return getName()
+                +
+                " - "
+                +
+                getArtist();
+    }
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

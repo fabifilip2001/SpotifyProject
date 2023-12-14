@@ -26,4 +26,25 @@ public final class Podcast extends AudioCollection {
     public AudioFile getTrackByIndex(int index) {
         return episodes.get(index);
     }
+
+    @Override
+    public String likedContentPagePrint() {
+        return null;
+    }
+
+    @Override
+    public int countLikes() {
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return getName()
+                +
+                ":\n\t"
+                +
+                getEpisodes()
+                +
+                "\n";
+    }
 }

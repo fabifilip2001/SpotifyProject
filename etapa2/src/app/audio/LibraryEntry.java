@@ -24,4 +24,5 @@ public abstract class LibraryEntry {
     public boolean matchesOwner(String user) { return false; }
     public boolean isVisibleToUser(String user) { return false; }
     public boolean matchesFollowers(String followers) { return false; }
+    public boolean matchesDescription(String description) { return false; }
 }

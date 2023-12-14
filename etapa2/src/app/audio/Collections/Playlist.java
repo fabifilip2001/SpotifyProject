@@ -37,9 +37,6 @@ public final class Playlist extends AudioCollection {
     public void removeSong(Song song) {
         songs.remove(song);
     }
-    public void removeSong(int index) {
-        songs.remove(index);
-    }
 
     public void switchVisibility() {
         if (visibility == Enums.Visibility.PUBLIC) {
@@ -87,4 +84,27 @@ public final class Playlist extends AudioCollection {
             return count == Integer.parseInt(query);
         }
     }
+
+    public int countLikes() {
+        int countLikes = 0;
+        for (Song song : songs) {
+            countLikes += song.getLikes();
+        }
+        return countLikes;
+    }
+
+    @Override
+    public String likedContentPagePrint() {
+        return getName()
+                +
+                " - "
+                +
+                getOwner();
+    }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
+
 }

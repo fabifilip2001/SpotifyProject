@@ -17,8 +17,13 @@ public abstract class AudioCollection extends LibraryEntry {
 
     public abstract AudioFile getTrackByIndex(int index);
 
+    public abstract int countLikes();
+
+    public abstract String likedContentPagePrint();
     @Override
     public boolean matchesOwner(String user) {
         return this.getOwner().equals(user);
     }
+
+
 }

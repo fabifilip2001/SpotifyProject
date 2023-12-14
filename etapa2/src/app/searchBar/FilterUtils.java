@@ -1,6 +1,7 @@
 package app.searchBar;
 
 import app.audio.LibraryEntry;
+import app.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,20 @@ public class FilterUtils {
         return filter(entries, entry -> entry.matchesFollowers(followers));
     }
 
+    public static List<LibraryEntry> filterByDescription(List<LibraryEntry> entries, String description) {
+        return filter(entries, entry -> entry.matchesDescription(description));
+    }
+
+    public static List<User> filterUsers(List<User> users, String username) {
+        List<User> result = new ArrayList<>();
+        for (User user : users) {
+            if (user.matchesUsername(username)) {
+                result.add(user);
+            }
+        }
+        return result;
+    }
+
     private static List<LibraryEntry> filter(List<LibraryEntry> entries, FilterCriteria criteria) {
         List<LibraryEntry> result = new ArrayList<>();
         for (LibraryEntry entry : entries) {
@@ -67,4 +82,5 @@ public class FilterUtils {
     private interface FilterCriteria {
         boolean matches(LibraryEntry entry);
     }
+
 }
