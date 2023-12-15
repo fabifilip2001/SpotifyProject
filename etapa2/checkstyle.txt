@@ -1,6 +1,7 @@
 Starting audit...
-[ERROR] C:\Users\fabif\Desktop\An4\POO\proiect\SpotifyProject\etapa2\.\src\app\Admin.java:30:1: Utility classes should not have a public or default constructor. [HideUtilityClassConstructor]
-[ERROR] C:\Users\fabif\Desktop\An4\POO\proiect\SpotifyProject\etapa2\.\src\app\CommandRunner.java:738:5: Missing a Javadoc comment. [MissingJavadocMethod]
+[ERROR] C:\Users\fabif\Desktop\An4\POO\proiect\SpotifyProject\etapa2\.\src\app\Admin.java:30:1: Class Admin should be declared as final. [FinalClass]
+[ERROR] C:\Users\fabif\Desktop\An4\POO\proiect\SpotifyProject\etapa2\.\src\app\Admin.java:42:5: Missing a Javadoc comment. [MissingJavadocMethod]
+[ERROR] C:\Users\fabif\Desktop\An4\POO\proiect\SpotifyProject\etapa2\.\src\app\CommandRunner.java:409: Line is longer than 100 characters (found 104). [LineLength]
 [ERROR] C:\Users\fabif\Desktop\An4\POO\proiect\SpotifyProject\etapa2\.\src\app\player\Player.java:205:18: '-90' is a magic number. [MagicNumber]
 [ERROR] C:\Users\fabif\Desktop\An4\POO\proiect\SpotifyProject\etapa2\.\src\app\player\Player.java:214:18: '90' is a magic number. [MagicNumber]
 [ERROR] C:\Users\fabif\Desktop\An4\POO\proiect\SpotifyProject\etapa2\.\src\app\player\PlayerSource.java:137:5: Missing a Javadoc comment. [MissingJavadocMethod]
@@ -24,4 +25,4 @@ Starting audit...
 [ERROR] C:\Users\fabif\Desktop\An4\POO\proiect\SpotifyProject\etapa2\.\src\main\Main.java:102: Line is longer than 100 characters (found 102). [LineLength]
 [ERROR] C:\Users\fabif\Desktop\An4\POO\proiect\SpotifyProject\etapa2\.\src\main\Main.java:111: Line is longer than 100 characters (found 108). [LineLength]
 Audit done.
-Checkstyle ends with 24 errors.
+Checkstyle ends with 25 errors.

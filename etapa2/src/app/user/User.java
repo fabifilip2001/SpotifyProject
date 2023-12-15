@@ -492,11 +492,11 @@ public class User {
      * function that switch user state (online / offline)
      * */
     public String switchConnectionStatus() {
-        if (!Admin.checkIfUserExists(username)) {
+        if (!Admin.getInstance().checkIfUserExists(username)) {
             return "The username %s doesn't exist.".formatted(username);
         }
 
-        if (Admin.getUser(username) == null) {
+        if (Admin.getInstance().getUser(username) == null) {
             return "%s is not a normal user.".formatted(username);
         }
 

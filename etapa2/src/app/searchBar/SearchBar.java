@@ -13,6 +13,7 @@ import static app.searchBar.FilterUtils.*;
 import static app.searchBar.FilterUtils.filterByFollowers;
 
 public final class SearchBar {
+    private final Admin adminInstance = Admin.getInstance();
     private List<LibraryEntry> results;
     @Getter
     private List<User> userResults;
@@ -48,7 +49,7 @@ public final class SearchBar {
 
         switch (type) {
             case "song":
-                entries = new ArrayList<>(Admin.getSongs());
+                entries = new ArrayList<>(adminInstance.getSongs());
 
                 if (filters.getName() != null) {
                     entries = filterByName(entries, filters.getName());
@@ -98,7 +99,7 @@ public final class SearchBar {
 
                 break;
             case "podcast":
-                entries = new ArrayList<>(Admin.getPodcasts());
+                entries = new ArrayList<>(adminInstance.getPodcasts());
 
                 if (filters.getName() != null) {
                     entries = filterByName(entries, filters.getName());
@@ -111,7 +112,7 @@ public final class SearchBar {
                 break;
 
             case "album":
-                entries = new ArrayList<>(Admin.getAlbums());
+                entries = new ArrayList<>(adminInstance.getAlbums());
                 if (filters.getName() != null) {
                     entries = filterByName(entries, filters.getName());
                 }
@@ -145,7 +146,7 @@ public final class SearchBar {
 
         switch (type) {
             case ("artist") -> {
-                users = new ArrayList<>(Admin.getArtists());
+                users = new ArrayList<>(adminInstance.getArtists());
 
                 if (filters.getName() != null) {
                     users = filterUsers(users, filters.getName());
@@ -153,7 +154,7 @@ public final class SearchBar {
             }
 
             case ("host") -> {
-                users = new ArrayList<>(Admin.getHosts());
+                users = new ArrayList<>(adminInstance.getHosts());
 
                 if (filters.getName() != null) {
                     users = filterUsers(users, filters.getName());

@@ -67,8 +67,8 @@ public final class Host extends User {
 
         Podcast podcast = new Podcast(commandInput.getName(), username, episodes);
         podcasts.add(podcast);
-        if (!Admin.getPodcasts().contains(podcast)) {
-            Admin.addPodcast(podcast);
+        if (!Admin.getInstance().getPodcasts().contains(podcast)) {
+            Admin.getInstance().addPodcast(podcast);
         }
 
         page.updateAudioCollection(PageUtils.getPodcasts(podcasts));
@@ -123,7 +123,7 @@ public final class Host extends User {
                 .equals(commandInput.getName()))) {
             return "%s doesn't have a podcast with the given name.".formatted(username);
         }
-        for (User user : Admin.getUsers()) {
+        for (User user : Admin.getInstance().getUsers()) {
             Player player = user.getPlayer();
             if (player.getSource() != null) {
                 if (player.getSource().getAudioCollection().getName()
@@ -135,8 +135,8 @@ public final class Host extends User {
             }
         }
 
-        Podcast podcast = Admin.getPodcast(commandInput.getName());
-        Admin.removePodcast(podcast);
+        Podcast podcast = Admin.getInstance().getPodcast(commandInput.getName());
+        Admin.getInstance().removePodcast(podcast);
         podcasts.remove(podcast);
         page.updateAudioCollection(PageUtils.getPodcasts(podcasts));
         return "%s deleted the podcast successfully.".formatted(username);

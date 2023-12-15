@@ -66,13 +66,13 @@ public final class Artist extends User {
                     song.getArtist());
             songs.add(newSong);
 
-            if (!Admin.getSongs().contains(newSong)) {
+            if (!Admin.getInstance().getSongs().contains(newSong)) {
                 Admin.addSong(newSong);
             }
         }
         Album album = new Album(commandInput.getName(), username, commandInput.getReleaseYear(),
                 commandInput.getDescription(), songs,  commandInput.getTimestamp());
-        Admin.addAlbum(album);
+        Admin.getInstance().addAlbum(album);
         albums.add(album);
         page.updateAudioCollection(PageUtils.getAlbums(albums));
         return "%s has added new album successfully.".formatted(username);
@@ -88,7 +88,7 @@ public final class Artist extends User {
             return "%s doesn't have an album with the given name.".formatted(username);
         }
 
-        for (User user : Admin.getUsers()) {
+        for (User user : Admin.getInstance().getUsers()) {
             Player player = user.getPlayer();
             if (user.getPage().equals(page)) {
                 return "%s can't delete this album.".formatted(username);
@@ -102,10 +102,10 @@ public final class Artist extends User {
                 }
             }
         }
-        Album album = Admin.getAlbum(commandInput.getName());
+        Album album = Admin.getInstance().getAlbum(commandInput.getName());
         albums.remove(album);
         page.updateAudioCollection(PageUtils.getAlbums(albums));
-        Admin.removeAlbum(album);
+        Admin.getInstance().removeAlbum(album);
 
         return "%s deleted the album successfully.".formatted(username);
     }

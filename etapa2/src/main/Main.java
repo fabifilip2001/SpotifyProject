@@ -77,12 +77,12 @@ public final class Main {
         CommandInput[] commands = objectMapper.readValue(new File(CheckerConstants.TESTS_PATH + filePath1), CommandInput[].class);
         ArrayNode outputs = objectMapper.createArrayNode();
 
-        System.out.println(filePath1);
-        Admin.setUsers(library.getUsers());
-        Admin.setSongs(library.getSongs());
-        Admin.setPodcasts(library.getPodcasts());
+        Admin adminInstance = Admin.getInstance();
+        adminInstance.setUsers(library.getUsers());
+        adminInstance.setSongs(library.getSongs());
+        adminInstance.setPodcasts(library.getPodcasts());
         for (CommandInput command : commands) {
-            Admin.updateTimestamp(command.getTimestamp());
+            adminInstance.updateTimestamp(command.getTimestamp());
 
             String commandName = command.getCommand();
             System.out.println(commandName + command.getTimestamp());
@@ -135,6 +135,6 @@ public final class Main {
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(filePath2), outputs);
 
-        Admin.reset();
+        Admin.getInstance().reset();
     }
 }
