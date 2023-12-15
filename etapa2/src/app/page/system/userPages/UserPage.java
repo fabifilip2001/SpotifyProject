@@ -1,7 +1,6 @@
 package app.page.system.userPages;
 
 import app.audio.Collections.AudioCollection;
-import app.audio.Collections.Playlist;
 import app.audio.Files.Song;
 import app.page.system.Page;
 import app.user.User;
@@ -13,13 +12,17 @@ public class UserPage extends Page {
     @Getter
     private List<Song> likedSongs;
 
-    public UserPage(User owner, List<AudioCollection> audioCollection, List<Song> likedSongs) {
+    public UserPage(final User owner, final List<AudioCollection> audioCollection,
+                    final List<Song> likedSongs) {
         super(owner, audioCollection);
         this.likedSongs = likedSongs;
     }
 
+    /**
+     * function that updates likedSongs from an user page
+     * */
     @Override
-    public void updateLikedSongs(List<Song> likedSongs) {
-        this.likedSongs = likedSongs;
+    public void updateLikedSongs(final List<Song> newLikedSongs) {
+        this.likedSongs = newLikedSongs;
     }
 }

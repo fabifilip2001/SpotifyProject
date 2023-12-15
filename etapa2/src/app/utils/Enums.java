@@ -1,7 +1,5 @@
 package app.utils;
 
-import app.page.system.userPages.LikedContentPage;
-
 public class Enums { // diferite enumuri, le-am gurpat pe toate intr-un loc
     public enum Genre {
         POP,

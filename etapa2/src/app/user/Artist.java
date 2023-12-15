@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public final class Artist extends User {
@@ -171,6 +170,9 @@ public final class Artist extends User {
         return "%s deleted the event successfully.".formatted(username);
     }
 
+    /**
+     * function that returns total likes that has an artist (sum of every song from every album)
+     * */
     public int countLikes() {
         int count = 0;
         for (Album album : albums) {

@@ -3,7 +3,6 @@ package app.searchBar;
 
 import app.Admin;
 import app.audio.LibraryEntry;
-import app.user.Artist;
 import app.user.User;
 import lombok.Getter;
 
@@ -13,7 +12,7 @@ import java.util.List;
 import static app.searchBar.FilterUtils.*;
 import static app.searchBar.FilterUtils.filterByFollowers;
 
-public class SearchBar {
+public final class SearchBar {
     private List<LibraryEntry> results;
     @Getter
     private List<User> userResults;
@@ -28,16 +27,23 @@ public class SearchBar {
     @Getter
     private User lastUserSelected;
 
-    public SearchBar(String user) {
+    public SearchBar(final String user) {
         this.results = new ArrayList<>();
         this.user = user;
     }
 
+    /**
+     * function that resets searchBar fields
+     * */
     public void clearSelection() {
         lastSelected = null;
         lastSearchType = null;
     }
-    public List<LibraryEntry> search(Filters filters, String type) {
+
+    /**
+     * function that searches a libraryEntry, conform to the input filters
+     * */
+    public List<LibraryEntry> search(final Filters filters, final String type) {
         List<LibraryEntry> entries;
 
         switch (type) {
@@ -131,7 +137,10 @@ public class SearchBar {
         return this.results;
     }
 
-    public List<User> searchUser(Filters filters, String type) {
+    /**
+     * function that searches an user, which can be artist or host
+     * */
+    public List<User> searchUser(final Filters filters, final String type) {
         List<User> users;
 
         switch (type) {
@@ -165,7 +174,10 @@ public class SearchBar {
         return this.userResults;
     }
 
-    public LibraryEntry select(Integer itemNumber) {
+    /**
+     * function that selects one of the LibraryEntities searched before
+     * */
+    public LibraryEntry select(final Integer itemNumber) {
         if (this.results.size() < itemNumber) {
             results.clear();
 
@@ -178,7 +190,10 @@ public class SearchBar {
         }
     }
 
-    public User selectUser(Integer itemNumber) {
+    /**
+     * function that selects one of the users searched before
+     * */
+    public User selectUser(final Integer itemNumber) {
         if (this.userResults.size() < itemNumber) {
             userResults.clear();
 
