@@ -15,6 +15,7 @@ import static app.searchBar.FilterUtils.filterByFollowers;
 
 public class SearchBar {
     private List<LibraryEntry> results;
+    @Getter
     private List<User> userResults;
     private final String user;
     private static final Integer MAX_RESULTS = 5;

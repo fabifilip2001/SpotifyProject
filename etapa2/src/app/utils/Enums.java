@@ -1,5 +1,7 @@
 package app.utils;
 
+import app.page.system.userPages.LikedContentPage;
+
 public class Enums { // diferite enumuri, le-am gurpat pe toate intr-un loc
     public enum Genre {
         POP,
@@ -28,5 +30,9 @@ public class Enums { // diferite enumuri, le-am gurpat pe toate intr-un loc
 
     public enum UserConnectionStatus {
         ONLINE, OFFLINE
+    }
+
+    public enum PageType {
+        HOMEPAGE, LIKED_CONTENT_PAGE, ARTIST_PAGE, HOST_PAGE
     }
 }

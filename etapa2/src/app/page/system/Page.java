@@ -14,17 +14,36 @@ public class Page {
     @Getter
     private List<AudioCollection> audioCollection;
 
-    public Page(User owner, List<AudioCollection> audioCollection) {
+    public Page(final User owner, final List<AudioCollection> audioCollection) {
         this.owner = owner;
         this.audioCollection = audioCollection;
     }
 
-    public void updateLikedSongs(List<Song> likedSongs) { }
+    /**
+     * method that will be overriden by subclasses;
+     * it updates the likedSongs from an userPage
+     * */
+    public void updateLikedSongs(final List<Song> likedSongs) { }
 
-    public void updateAudioCollection(List<AudioCollection> audioCollection) {
-        this.audioCollection = audioCollection;
+    /**
+     * method that will be overriden by subclasses;
+     * it updates the audioCollection from an userPage
+     * */
+    public void updateAudioCollection(final List<AudioCollection> newAudioCollection) {
+        this.audioCollection = newAudioCollection;
     }
 
-    public void updateAnnouncements(List<Announcement> announcements) { }
-    public String print() { return null; };
+    /**
+     * method that will be overriden by subclasses;
+     * it updates the announcements from an artistPage
+     * */
+    public void updateAnnouncements(final List<Announcement> announcements) { }
+
+    /**
+     * method that will be overriden by subclasses;
+     * it prints every page in its special format
+     * */
+    public String print() {
+        return null;
+    }
 }

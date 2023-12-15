@@ -22,7 +22,6 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class User {
     @Getter
@@ -39,13 +38,17 @@ public class User {
     private ArrayList<Playlist> followedPlaylists;
     @Getter
     private final Player player;
+    @Getter
     private final SearchBar searchBar;
     private boolean lastSearched;
     @Getter
     private Enums.UserConnectionStatus connectionStatus;
+    @Getter
     private Page page;
+    @Getter
+    private Enums.PageType pageType;
 
-    public User(String username, int age, String city) {
+    public User(final String username, final int age, final String city) {
         this.username = username;
         this.age = age;
         this.city = city;
@@ -56,22 +59,21 @@ public class User {
         searchBar = new SearchBar(username);
         lastSearched = false;
         connectionStatus = Enums.UserConnectionStatus.ONLINE;
-//        LikedContentPage likedContentPage = new LikedContentPage(this,
-//                PageUtils.getPlaylists(followedPlaylists), likedSongs);
         page = new HomePage(this,
                 new ArrayList<>(PageUtils.mostLikedFollowedPlaylists(followedPlaylists)),
-                new ArrayList<>(PageUtils.bestLikedSongs(likedSongs)));;
+                new ArrayList<>(PageUtils.bestLikedSongs(likedSongs)));
+        pageType = Enums.PageType.HOMEPAGE;
     }
 
-    public boolean matchesUsername(String name) {
+    public boolean matchesUsername(final String name) {
         return getUsername().toLowerCase().startsWith(name.toLowerCase());
     }
 
-    public void setPage(Page page) {
+    public void setPage(final Page page) {
         this.page = page;
     }
 
-    public ArrayList<String> search(Filters filters, String type) {
+    public ArrayList<String> search(final Filters filters, final String type) {
         ArrayList<String> results = new ArrayList<>();
 
         if (!isOffline()) {
@@ -100,7 +102,7 @@ public class User {
         return results;
     }
 
-    public String select(int itemNumber) {
+    public String select(final int itemNumber) {
         if (!lastSearched)
             return "Please conduct a search before making a selection.";
 
@@ -115,6 +117,11 @@ public class User {
                     return "The selected ID is too high.";
 
                 page = selectedUser.getPage();
+                if (searchBar.getLastSearchType().equals("artist")) {
+                    pageType = Enums.PageType.ARTIST_PAGE;
+                } else {
+                    pageType = Enums.PageType.HOST_PAGE;
+                }
                 return "Successfully selected %s's page.".formatted(selectedUser.getUsername());
             default:
                 LibraryEntry selected = searchBar.select(itemNumber);
@@ -172,7 +179,7 @@ public class User {
         return "Repeat mode changed to %s.".formatted(repeatStatus);
     }
 
-    public String shuffle(Integer seed) {
+    public String shuffle(final Integer seed) {
         if (player.getCurrentAudioFile() == null)
             return "Please load a source before using the shuffle function.";
 
@@ -217,22 +224,23 @@ public class User {
         if (player.getCurrentAudioFile() == null)
             return "Please load a source before liking or unliking.";
 
-        if (!player.getType().equals("song") && !player.getType().equals("playlist"))
+        if (!player.getType().equals("song") && !player.getType().equals("playlist") && !player.getType().equals("album"))
             return "Loaded source is not a song.";
 
         Song song = (Song) player.getCurrentAudioFile();
 
         if (likedSongs.contains(song)) {
             likedSongs.remove(song);
-            page.updateLikedSongs(likedSongs);
             song.dislike();
+            page.updateLikedSongs(likedSongs);
 
             return "Unlike registered successfully.";
         }
 
         likedSongs.add(song);
-        page.updateLikedSongs(likedSongs);
         song.like();
+        page.updateLikedSongs(likedSongs);
+
         return "Like registered successfully.";
     }
 
@@ -257,7 +265,7 @@ public class User {
         return "Returned to previous track successfully. The current track is %s.".formatted(player.getCurrentAudioFile().getName());
     }
 
-    public String createPlaylist(String name, int timestamp) {
+    public String createPlaylist(final String name, final int timestamp) {
         if (playlists.stream().anyMatch(playlist -> playlist.getName().equals(name)))
             return "A playlist with the same name already exists.";
 
@@ -266,7 +274,7 @@ public class User {
         return "Playlist created successfully.";
     }
 
-    public String addRemoveInPlaylist(int Id) {
+    public String addRemoveInPlaylist(final int Id) {
         if (player.getCurrentAudioFile() == null)
             return "Please load a source before adding to or removing from the playlist.";
 
@@ -287,7 +295,7 @@ public class User {
         return "Successfully added to playlist.";
     }
 
-    public String switchPlaylistVisibility(Integer playlistId) {
+    public String switchPlaylistVisibility(final Integer playlistId) {
         if (playlistId > playlists.size())
             return "The specified playlist ID is too high.";
 
@@ -388,7 +396,7 @@ public class User {
                 ? Enums.UserConnectionStatus.ONLINE : Enums.UserConnectionStatus.OFFLINE;
         return "%s has changed status successfully.".formatted(username);
     }
-    public void removeFromLikedSongs(Song song) {
+    public void removeFromLikedSongs(final Song song) {
         getLikedSongs().remove(song);
         page.updateLikedSongs(getLikedSongs());
     }
@@ -398,7 +406,7 @@ public class User {
 
         return page.print();
     }
-    public String changePage(CommandInput commandInput) {
+    public String changePage(final CommandInput commandInput) {
         String username = commandInput.getUsername();
         String pageName = commandInput.getNextPage();
 
@@ -425,7 +433,7 @@ public class User {
     public boolean isOffline() {
         return getConnectionStatus().equals(Enums.UserConnectionStatus.OFFLINE);
     }
-    public void simulateTime(int time) {
+    public void simulateTime(final int time) {
         player.simulatePlayer(time);
     }
 }

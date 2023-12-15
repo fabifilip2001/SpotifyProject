@@ -8,18 +8,22 @@ import lombok.Getter;
 
 import java.util.List;
 
-public class HostPage extends Page {
+public final class HostPage extends Page {
     @Getter
     private List<Announcement> announcements;
 
-    public HostPage(User owner, List<AudioCollection> audioCollection, List<Announcement> announcements) {
+    public HostPage(final User owner, final List<AudioCollection> audioCollection,
+                    final List<Announcement> announcements) {
         super(owner, audioCollection);
         this.announcements = announcements;
     }
 
+    /**
+     * function thar updates a host's announcements
+     * */
     @Override
-    public void updateAnnouncements(List<Announcement> announcements) {
-        this.announcements = announcements;
+    public void updateAnnouncements(final List<Announcement> newAnnouncements) {
+        this.announcements = newAnnouncements;
     }
 
     @Override

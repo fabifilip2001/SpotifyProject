@@ -1,6 +1,10 @@
 package app;
 
-import app.audio.Collections.*;
+import app.audio.Collections.Podcast;
+import app.audio.Collections.Playlist;
+import app.audio.Collections.Album;
+import app.audio.Collections.AlbumOutput;
+import app.audio.Collections.PodcastOutput;
 import app.audio.Files.Episode;
 import app.audio.Files.Song;
 import app.page.system.PageUtils;
@@ -8,11 +12,18 @@ import app.user.Artist;
 import app.user.Host;
 import app.user.User;
 import app.utils.Enums;
-import fileio.input.*;
-import lombok.Getter;
+import app.utils.Utils;
+import fileio.input.EpisodeInput;
+import fileio.input.PodcastInput;
+import fileio.input.SongInput;
+import fileio.input.UserInput;
 
-import javax.sql.ConnectionPoolDataSource;
-import java.util.*;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Comparator;
+import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,14 +36,20 @@ public class Admin {
     private static List<Host> hosts = new ArrayList<>();
     private static int timestamp = 0;
 
-    public static void setUsers(List<UserInput> userInputList) {
+    /**
+     * method that sets users from database with input users
+     * */
+    public static void setUsers(final List<UserInput> userInputList) {
         users = new ArrayList<>();
         for (UserInput userInput : userInputList) {
             users.add(new User(userInput.getUsername(), userInput.getAge(), userInput.getCity()));
         }
     }
 
-    public static void setSongs(List<SongInput> songInputList) {
+    /**
+     * method that sets songs from database with input songs
+     * */
+    public static void setSongs(final List<SongInput> songInputList) {
         songs = new ArrayList<>();
         for (SongInput songInput : songInputList) {
             songs.add(new Song(songInput.getName(), songInput.getDuration(), songInput.getAlbum(),
@@ -41,12 +58,16 @@ public class Admin {
         }
     }
 
-    public static void setPodcasts(List<PodcastInput> podcastInputList) {
+    /**
+     * method that sets podcasts from database with input podcasts
+     * */
+    public static void setPodcasts(final List<PodcastInput> podcastInputList) {
         podcasts = new ArrayList<>();
         for (PodcastInput podcastInput : podcastInputList) {
             List<Episode> episodes = new ArrayList<>();
             for (EpisodeInput episodeInput : podcastInput.getEpisodes()) {
-                episodes.add(new Episode(episodeInput.getName(), episodeInput.getDuration(), episodeInput.getDescription()));
+                episodes.add(new Episode(episodeInput.getName(), episodeInput.getDuration(),
+                        episodeInput.getDescription()));
             }
             podcasts.add(new Podcast(podcastInput.getName(), podcastInput.getOwner(), episodes));
         }
@@ -60,14 +81,30 @@ public class Admin {
         return new ArrayList<>(podcasts);
     }
 
-    public static List<User> getUsers() { return new ArrayList<>(users); }
-    public static List<Artist> getArtists() { return new ArrayList<>(artists); }
+    public static List<User> getUsers() {
+        return new ArrayList<>(users);
+    }
+    public static List<Artist> getArtists() {
+        return new ArrayList<>(artists);
+    }
 
-    public static List<Host> getHosts() { return new ArrayList<>(hosts); }
-    public static List<Album> getAlbums() { return new ArrayList<>(albums); }
+    public static List<Host> getHosts() {
+        return new ArrayList<>(hosts);
+    }
+    public static List<Album> getAlbums() {
+        return new ArrayList<>(albums);
+    }
 
-    public static void addSong(Song song) { songs.add(song); }
+    /**
+     * method that adds a songs in database's songs
+     * */
+    public static void addSong(final Song song) {
+        songs.add(song);
+    }
 
+    /**
+     * method that returns the playlists from database
+     * */
     public static List<Playlist> getPlaylists() {
         List<Playlist> playlists = new ArrayList<>();
         for (User user : users) {
@@ -76,7 +113,10 @@ public class Admin {
         return playlists;
     }
 
-    public static User getUser(String username) {
+    /**
+     * method that returns an user from database with a given username or null else
+     * */
+    public static User getUser(final String username) {
         for (User user : users) {
             if (user.getUsername().equals(username)) {
                 return user;
@@ -85,7 +125,10 @@ public class Admin {
         return null;
     }
 
-    public static Artist getArtist(String username) {
+    /**
+     * method that returns an artist from database with a given username or null else
+     * */
+    public static Artist getArtist(final String username) {
         for (Artist artist : artists) {
             if (artist.getUsername().equals(username)) {
                 return artist;
@@ -93,7 +136,11 @@ public class Admin {
         }
         return null;
     }
-    public static Host getHost(String username) {
+
+    /**
+     * method that returns a host from database with a given username or null else
+     * */
+    public static Host getHost(final String username) {
         for (Host host : hosts) {
             if (host.getUsername().equals(username)) {
                 return host;
@@ -102,7 +149,10 @@ public class Admin {
         return null;
     }
 
-    public static void removeUser(User user) {
+    /**
+     * function that removes a given user from database's users
+     * */
+    public static void removeUser(final User user) {
         Iterator<User> iterator = users.iterator();
         while (iterator.hasNext()) {
             User user1 = iterator.next();
@@ -112,7 +162,10 @@ public class Admin {
         }
     }
 
-    public static void removeArtist(Artist artist) {
+    /**
+     * function that removes a given artist from database's artists
+     * */
+    public static void removeArtist(final Artist artist) {
         Iterator<Artist> iterator = artists.iterator();
         while (iterator.hasNext()) {
             Artist artist1 = iterator.next();
@@ -125,7 +178,10 @@ public class Admin {
         }
     }
 
-    public static void removeArtistsSongs(Artist artist) {
+    /**
+     * function that removes all the songs contained in a given artist's albums
+     * */
+    public static void removeArtistsSongs(final Artist artist) {
         for (Album album : artist.getAlbums()) {
             for (Song song : album.getSongs()) {
                 songs.remove(song);
@@ -133,14 +189,21 @@ public class Admin {
         }
     }
 
-    public static void removeArtistsAlbums(Artist artist) {
+    /**
+     * function that removes a given artist's albums
+     * */
+    public static void removeArtistsAlbums(final Artist artist) {
         for (Album artistAlbum : artist.getAlbums()) {
             if (albums.contains(artistAlbum)) {
                 albums.remove(artistAlbum);
             }
         }
     }
-    public static Album getAlbum(String name) {
+
+    /**
+     * method that returns an album from database with a given name or null else
+     * */
+    public static Album getAlbum(final String name) {
         for (Album album : albums) {
             if (album.getName().equals(name)) {
                 return album;
@@ -149,7 +212,10 @@ public class Admin {
         return  null;
     }
 
-    public static Podcast getPodcast(String name) {
+    /**
+     * method that returns a podcast from database with a given name or null else
+     * */
+    public static Podcast getPodcast(final String name) {
         for (Podcast podcast : podcasts) {
             if (podcast.getName().equals(name)) {
                 return podcast;
@@ -157,15 +223,25 @@ public class Admin {
         }
         return null;
     }
-    public static void removeAlbum(Album album) {
+
+    /**
+     * method that removes an album with a given name from database's albums
+     * */
+    public static void removeAlbum(final Album album) {
         albums.remove(album);
     }
 
-    public static void removePodcast(Podcast podcast) {
+    /**
+     * method that removes a podcast with a given name from database's podcasts
+     * */
+    public static void removePodcast(final Podcast podcast) {
         podcasts.remove(podcast);
     }
 
-    public static void updateUserOnRemove(Artist artist) {
+    /**
+     * function that removes an user's liked songs, when an artist is removed
+     * */
+    public static void updateUserOnRemove(final Artist artist) {
         for (User user : users) {
             for (Album album : artist.getAlbums()) {
                 for (Song song : album.getSongs()) {
@@ -176,6 +252,10 @@ public class Admin {
             }
         }
     }
+
+    /**
+     * function that returns all the users from database
+     * */
     public static List<String> getAllUsers() {
         ArrayList<User> allUsers = new ArrayList<>(Stream.of(users, artists, hosts)
                         .flatMap(Collection::stream)
@@ -183,7 +263,9 @@ public class Admin {
         return allUsers.stream().map(User::getUsername).collect(Collectors.toList());
     }
 
-
+    /**
+     * function that returns the online normal users
+     * */
     public static List<String> getOnlineUsers() {
         ArrayList<User> onlineUser = new ArrayList<>();
         for (User user : users) {
@@ -194,11 +276,17 @@ public class Admin {
         return onlineUser.stream().map(User::getUsername).collect(Collectors.toList());
     }
 
-    public static boolean checkIfUserExists(String username) {
+    /**
+     * function that verify an user with a given username exists in database
+     * */
+    public static boolean checkIfUserExists(final String username) {
         return getAllUsers().contains(username);
     }
 
-    public static void updateTimestamp(int newTimestamp) {
+    /**
+     * function that updates timestamp
+     * */
+    public static void updateTimestamp(final int newTimestamp) {
         int elapsed = newTimestamp - timestamp;
         timestamp = newTimestamp;
         if (elapsed == 0) {
@@ -212,19 +300,27 @@ public class Admin {
         }
     }
 
+    /**
+     * function that returns the first most 5 liked songs from the app
+     * */
     public static List<String> getTop5Songs() {
         List<Song> sortedSongs = new ArrayList<>(songs);
         sortedSongs.sort(Comparator.comparingInt(Song::getLikes).reversed());
         List<String> topSongs = new ArrayList<>();
         int count = 0;
         for (Song song : sortedSongs) {
-            if (count >= 5) break;
+            if (count >= Utils.MAXIMUM_RESULT_SIZE) {
+                break;
+            }
             topSongs.add(song.getName());
             count++;
         }
         return topSongs;
     }
 
+    /**
+     * function that returns the most 5 followed playlists from the app
+     * */
     public static List<String> getTop5Playlists() {
         List<Playlist> sortedPlaylists = new ArrayList<>(getPlaylists());
         sortedPlaylists.sort(Comparator.comparingInt(Playlist::getFollowers)
@@ -233,18 +329,34 @@ public class Admin {
         List<String> topPlaylists = new ArrayList<>();
         int count = 0;
         for (Playlist playlist : sortedPlaylists) {
-            if (count >= 5) break;
+            if (count >= Utils.MAXIMUM_RESULT_SIZE) {
+                break;
+            }
             topPlaylists.add(playlist.getName());
             count++;
         }
         return topPlaylists;
     }
-    public static void addAlbum(Album album) {
+
+    /**
+     * function that adds a new album in the database
+     * */
+    public static void addAlbum(final Album album) {
         albums.add(album);
     }
 
-    public static void addPodcast(Podcast podcast) { podcasts.add(podcast); }
-    public static String addUser(String username, String userType, Integer age, String city) {
+    /**
+     * function that adds a new podcast in the database
+     * */
+    public static void addPodcast(final Podcast podcast) {
+        podcasts.add(podcast);
+    }
+
+    /**
+     * function that adds a new normal user in database
+     * */
+    public static String addUser(final String username, final String userType, final Integer age,
+                                 final String city) {
         for (String user : getAllUsers()) {
             if (user.equals(username)) {
                 return "The username %s is already taken.".formatted(username);
@@ -265,30 +377,58 @@ public class Admin {
                 Host host = new Host(username, age, city);
                 Admin.hosts.add(host);
             }
+            default -> System.out.println("Invalid user type.");
         }
 
         return "The username %s has been added successfully.".formatted(username);
     }
 
-    public static String deleteUser(String username) {
-        if (!getAllUsers().contains(username))
+    /**
+     * function that removes a normal user and its connections from app
+     * */
+    public static String deleteUser(final String username) {
+        if (!getAllUsers().contains(username)) {
             return "The username %s doesn't exist.".formatted(username);
+        }
 
         if (getUser(username) != null) {
             User user = getUser(username);
+
             for (User user1 : users) {
-                user1.getFollowedPlaylists().removeIf(playlist -> playlist.getOwner().equals(username));
-                user1.getPage().updateAudioCollection(PageUtils.getPlaylists(user1.getFollowedPlaylists()));
+                if (user1.getPlayer().getSource() != null
+                        && user1.getPlayer().getSource().getAudioCollection() != null
+                        && user.getPlaylists().stream().anyMatch(playlist -> playlist
+                        .equals(user1.getPlayer().getSource().getAudioCollection()))) {
+                    return "%s can't be deleted.".formatted(username);
+                }
+                user1.getFollowedPlaylists().removeIf(playlist -> playlist.getOwner()
+                        .equals(username));
+                user1.getPage().updateAudioCollection(PageUtils.getPlaylists(user1
+                        .getFollowedPlaylists()));
             }
             user.getFollowedPlaylists().forEach(playlist -> playlist.decreaseFollowers());
             removeUser(user);
         } else if (getArtist(username) != null) {
             Artist artist = getArtist(username);
             for (User user : users) {
+                if (user.getPage().equals(artist.getPage())) {
+                    return "%s can't be deleted.".formatted(username);
+                }
+
+                if (user.getSearchBar() != null) {
+                    if ((user.getSearchBar().getUserResults() != null
+                            && user.getSearchBar().getUserResults().contains(artist))) {
+                        System.out.println("hahahahaha");
+                        return "%s can't be deleted.".formatted(username);
+                    }
+                }
                 if (user.getPlayer().getSource() != null) {
-                    if (user.getPlayer().getSource().getType().equals(Enums.PlayerSourceType.LIBRARY)
-                && artist.getAlbums().stream().anyMatch(album -> album.getSongs().contains(user.getPlayer().getSource().getAudioFile()))
-                || user.getPlayer().getSource().getType().equals(Enums.PlayerSourceType.ALBUM)){
+                    if ((user.getPlayer().getSource().getType()
+                            .equals(Enums.PlayerSourceType.LIBRARY)
+                            || user.getPlayer().getSource().getType()
+                            .equals(Enums.PlayerSourceType.ALBUM))
+                && artist.getAlbums().stream().anyMatch(album -> album.getSongs()
+                            .contains(user.getPlayer().getSource().getAudioFile()))) {
                         return "%s can't be deleted.".formatted(username);
                     }
                 }
@@ -304,7 +444,7 @@ public class Admin {
                     if (user.getPlayer().getSource().getType()
                             .equals(Enums.PlayerSourceType.PODCAST) && (host.getPodcasts().stream()
                             .anyMatch(podcast -> podcast.getEpisodes()
-                                    .contains(user.getPlayer().getSource().getAudioFile())))){
+                                    .contains(user.getPlayer().getSource().getAudioFile())))) {
                         return "%s can't be deleted.".formatted(username);
                     }
                 }
@@ -313,7 +453,10 @@ public class Admin {
         return "%s was successfully deleted.".formatted(username);
     }
 
-    public static List<AlbumOutput> showAlbums(String username) {
+    /**
+     * function that returns an artist's albums in a specific output format
+     * */
+    public static List<AlbumOutput> showAlbums(final String username) {
         List<AlbumOutput> albumOutputs = new ArrayList<>();
 
         Artist artist = Admin.getArtist(username);
@@ -324,7 +467,10 @@ public class Admin {
         return albumOutputs;
     }
 
-    public static List<PodcastOutput> showPodcasts(String username) {
+    /**
+     * function that returns a host's podcasts in a specific output format
+     * */
+    public static List<PodcastOutput> showPodcasts(final String username) {
         List<PodcastOutput> podcastOutputs = new ArrayList<>();
 
         Host host = Admin.getHost(username);
@@ -335,16 +481,37 @@ public class Admin {
         return podcastOutputs;
     }
 
+    /**
+     * functions that returns most 5 liked albums in the app
+     * */
     public static List<String> getTop5Albums() {
         List<Album> sortedAlbums = new ArrayList<>(getAlbums());
-        sortedAlbums.sort(Comparator.comparingInt(Album::countLikes).reversed());
+        sortedAlbums.sort(Comparator.comparingInt(Album::countLikes)
+                .reversed()
+                .thenComparing(Album::getName));
 
         List<String> topAlbums = new ArrayList<>();
         sortedAlbums.forEach(album -> topAlbums.add(album.getName()));
-
-        return topAlbums.stream().limit(5).collect(Collectors.toList());
+        return topAlbums.stream().limit(Utils.MAXIMUM_RESULT_SIZE).collect(Collectors.toList());
     }
 
+    /**
+     * function that retruns most 5 appreciate artists after their albums songs likes in the app
+     * */
+    public static List<String> getTop5Artists() {
+        List<Artist> sortedArtists = new ArrayList<>(getArtists());
+        sortedArtists.sort(Comparator.comparingInt(Artist::countLikes).reversed());
+
+        List<String> mostAppreciateArtists = new ArrayList<>();
+        sortedArtists.forEach(artist -> mostAppreciateArtists.add(artist.getUsername()));
+
+        return mostAppreciateArtists.stream()
+                .limit(Utils.MAXIMUM_RESULT_SIZE).collect(Collectors.toList());
+    }
+
+    /**
+     * function that reset all database's entities after each test
+     * */
     public static void reset() {
         users = new ArrayList<>();
         songs = new ArrayList<>();

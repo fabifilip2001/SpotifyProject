@@ -11,7 +11,7 @@ public class PodcastOutput {
     private final String name;
     private final List<String> episodes;
 
-    public PodcastOutput(Podcast podcast) {
+    public PodcastOutput(final Podcast podcast) {
         this.episodes = new ArrayList<>();
         this.name = podcast.getName();
         for (Episode episode: podcast.getEpisodes()) {

@@ -3,26 +3,27 @@ package app;
 import app.audio.Collections.AlbumOutput;
 import app.audio.Collections.PlaylistOutput;
 import app.audio.Collections.PodcastOutput;
-import app.page.system.PageUtils;
 import app.player.PlayerStats;
 import app.searchBar.Filters;
 import app.user.Artist;
 import app.user.Host;
 import app.user.User;
-import app.utils.Enums;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.input.CommandInput;
 
-import java.io.PushbackReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class CommandRunner {
-    static ObjectMapper objectMapper = new ObjectMapper();
+public final class CommandRunner {
+    private static ObjectMapper objectMapper = new ObjectMapper();
 
-    public static ObjectNode search(CommandInput commandInput) {
+    private CommandRunner() { }
+
+    /**
+     * function that calls the 'search' logical function and format its output
+     * */
+    public static ObjectNode search(final CommandInput commandInput) {
         String message;
         User user = Admin.getUser(commandInput.getUsername());
         Filters filters = new Filters(commandInput.getFilters());
@@ -45,7 +46,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode select(CommandInput commandInput) {
+    /**
+     * function that calls the 'select' logical function and format its output
+     * */
+    public static ObjectNode select(final CommandInput commandInput) {
         User user = Admin.getUser(commandInput.getUsername());
 
         String message = user.select(commandInput.getItemNumber());
@@ -59,7 +63,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode load(CommandInput commandInput) {
+    /**
+     * function that calls the 'load' logical function and format its output
+     * */
+    public static ObjectNode load(final CommandInput commandInput) {
         User user = Admin.getUser(commandInput.getUsername());
         String message = user.load();
 
@@ -72,7 +79,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode playPause(CommandInput commandInput) {
+    /**
+     * function that calls the 'playpause' logical function and format its output
+     * */
+    public static ObjectNode playPause(final CommandInput commandInput) {
         User user = Admin.getUser(commandInput.getUsername());
         String message = user.playPause();
 
@@ -85,7 +95,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode repeat(CommandInput commandInput) {
+    /**
+     * function that calls the 'repeat' logical function and format its output
+     * */
+    public static ObjectNode repeat(final CommandInput commandInput) {
         User user = Admin.getUser(commandInput.getUsername());
         String message = user.repeat();
 
@@ -98,7 +111,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode shuffle(CommandInput commandInput) {
+    /**
+     * function that calls the 'shuffle' logical function and format its output
+     * */
+    public static ObjectNode shuffle(final CommandInput commandInput) {
         User user = Admin.getUser(commandInput.getUsername());
         Integer seed = commandInput.getSeed();
         String message = user.shuffle(seed);
@@ -112,7 +128,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode forward(CommandInput commandInput) {
+    /**
+     * function that calls the 'forward' logical function and format its output
+     * */
+    public static ObjectNode forward(final CommandInput commandInput) {
         User user = Admin.getUser(commandInput.getUsername());
         String message = user.forward();
 
@@ -125,7 +144,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode backward(CommandInput commandInput) {
+    /**
+     * function that calls the 'backward' logical function and format its output
+     * */
+    public static ObjectNode backward(final CommandInput commandInput) {
         User user = Admin.getUser(commandInput.getUsername());
         String message = user.backward();
 
@@ -138,7 +160,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode like(CommandInput commandInput) {
+    /**
+     * function that calls the 'like' logical function and format its output
+     * */
+    public static ObjectNode like(final CommandInput commandInput) {
         User user = Admin.getUser(commandInput.getUsername());
         String message = user.like();
 
@@ -151,7 +176,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode next(CommandInput commandInput) {
+    /**
+     * function that calls the 'next' logical function and format its output
+     * */
+    public static ObjectNode next(final CommandInput commandInput) {
         User user = Admin.getUser(commandInput.getUsername());
         String message = user.next();
 
@@ -164,7 +192,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode prev(CommandInput commandInput) {
+    /**
+     * function that calls the 'prev' logical function and format its output
+     * */
+    public static ObjectNode prev(final CommandInput commandInput) {
         User user = Admin.getUser(commandInput.getUsername());
         String message = user.prev();
 
@@ -177,9 +208,13 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode createPlaylist(CommandInput commandInput) {
+    /**
+     * function that calls the 'createPlaylist' logical function and format its output
+     * */
+    public static ObjectNode createPlaylist(final CommandInput commandInput) {
         User user = Admin.getUser(commandInput.getUsername());
-        String message = user.createPlaylist(commandInput.getPlaylistName(), commandInput.getTimestamp());
+        String message = user.createPlaylist(commandInput.getPlaylistName(),
+                commandInput.getTimestamp());
 
         ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put("command", commandInput.getCommand());
@@ -190,7 +225,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode addRemoveInPlaylist(CommandInput commandInput) {
+    /**
+     * function that calls the 'addRemoveInPlaylist' logical function and format its output
+     * */
+    public static ObjectNode addRemoveInPlaylist(final CommandInput commandInput) {
         User user = Admin.getUser(commandInput.getUsername());
         String message = user.addRemoveInPlaylist(commandInput.getPlaylistId());
 
@@ -203,7 +241,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode switchVisibility(CommandInput commandInput) {
+    /**
+     * function that calls the 'switchVisibility' logical function and format its output
+     * */
+    public static ObjectNode switchVisibility(final CommandInput commandInput) {
         User user = Admin.getUser(commandInput.getUsername());
         String message = user.switchPlaylistVisibility(commandInput.getPlaylistId());
 
@@ -216,7 +257,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode showPlaylists(CommandInput commandInput) {
+    /**
+     * function that calls the 'showPlaylists' logical function and format its output
+     * */
+    public static ObjectNode showPlaylists(final CommandInput commandInput) {
         User user = Admin.getUser(commandInput.getUsername());
         ArrayList<PlaylistOutput> playlists = user.showPlaylists();
 
@@ -229,7 +273,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode follow(CommandInput commandInput) {
+    /**
+     * function that calls the 'follow' logical function and format its output
+     * */
+    public static ObjectNode follow(final CommandInput commandInput) {
         User user = Admin.getUser(commandInput.getUsername());
         String message = user.follow();
 
@@ -242,7 +289,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode status(CommandInput commandInput) {
+    /**
+     * function that calls the 'status' logical function and format its output
+     * */
+    public static ObjectNode status(final CommandInput commandInput) {
         User user = Admin.getUser(commandInput.getUsername());
         PlayerStats stats = user.getPlayerStats();
 
@@ -255,7 +305,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode showLikedSongs(CommandInput commandInput) {
+    /**
+     * function that calls the 'showLikedSongs' logical function and format its output
+     * */
+    public static ObjectNode showLikedSongs(final CommandInput commandInput) {
         User user = Admin.getUser(commandInput.getUsername());
         ArrayList<String> songs = user.showPreferredSongs();
 
@@ -268,7 +321,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode getPreferredGenre(CommandInput commandInput) {
+    /**
+     * function that calls the 'getPreferredGenre' logical function and format its output
+     * */
+    public static ObjectNode getPreferredGenre(final CommandInput commandInput) {
         User user = Admin.getUser(commandInput.getUsername());
         String preferredGenre = user.getPreferredGenre();
 
@@ -281,7 +337,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode getTop5Songs(CommandInput commandInput) {
+    /**
+     * function that calls the 'getTop5Songs' logical function and format its output
+     * */
+    public static ObjectNode getTop5Songs(final CommandInput commandInput) {
         List<String> songs = Admin.getTop5Songs();
 
         ObjectNode objectNode = objectMapper.createObjectNode();
@@ -292,7 +351,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode getTop5Playlists(CommandInput commandInput) {
+    /**
+     * function that calls the 'getTop5Playlists' logical function and format its output
+     * */
+    public static ObjectNode getTop5Playlists(final CommandInput commandInput) {
         List<String> playlists = Admin.getTop5Playlists();
 
         ObjectNode objectNode = objectMapper.createObjectNode();
@@ -303,7 +365,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode switchConnectionStatus(CommandInput commandInput) {
+    /**
+     * function that calls the 'switchConnectionStatus' logical function and format its output
+     * */
+    public static ObjectNode switchConnectionStatus(final CommandInput commandInput) {
         String message;
         String username = commandInput.getUsername();
         if (!Admin.getAllUsers().contains(username)) {
@@ -323,7 +388,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode getOnlineUsers(CommandInput commandInput) {
+    /**
+     * function that calls the 'getOnlineUsers' logical function and format its output
+     * */
+    public static ObjectNode getOnlineUsers(final CommandInput commandInput) {
         List<String> onlineUsers = Admin.getOnlineUsers();
 
         ObjectNode objectNode = objectMapper.createObjectNode();
@@ -334,7 +402,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode addUser(CommandInput commandInput) {
+    /**
+     * function that calls the 'addUser' logical function and format its output
+     * */
+    public static ObjectNode addUser(final CommandInput commandInput) {
         String message = Admin.addUser(commandInput.getUsername(), commandInput.getType(),
                 commandInput.getAge(), commandInput.getCity());
 
@@ -347,14 +418,17 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode addAlbum(CommandInput commandInput) {
+    /**
+     * function that calls the 'addAlbum' logical function and format its output
+     * */
+    public static ObjectNode addAlbum(final CommandInput commandInput) {
         String message;
         String username = commandInput.getUsername();
 
         if (!Admin.getAllUsers().contains(username)) {
             message = "The username %s doesn't exist.".formatted(username);
         } else if (Admin.getArtist(username) == null) {
-            message = "%s is not a normal user.".formatted(username);
+            message = "%s is not an artist.".formatted(username);
         } else {
             Artist artist = Admin.getArtist(username);
             message = artist.addAlbum(commandInput);
@@ -369,7 +443,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode showAlbums(CommandInput commandInput) {
+    /**
+     * function that calls the 'showAlbums' logical function and format its output
+     * */
+    public static ObjectNode showAlbums(final CommandInput commandInput) {
         List<AlbumOutput> albumOutputs = Admin.showAlbums(commandInput.getUsername());
 
         ObjectNode objectNode = objectMapper.createObjectNode();
@@ -381,7 +458,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode printCurrentPage(CommandInput commandInput) {
+    /**
+     * function that calls the 'printCurrentPage' logical function and format its output
+     * */
+    public static ObjectNode printCurrentPage(final CommandInput commandInput) {
         String username = commandInput.getUsername();
         User user = Admin.getUser(username);
 
@@ -393,7 +473,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode addEvent(CommandInput commandInput) {
+    /**
+     * function that calls the 'addEvent' logical function and format its output
+     * */
+    public static ObjectNode addEvent(final CommandInput commandInput) {
         String message;
         String username = commandInput.getUsername();
 
@@ -414,7 +497,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode addMerch(CommandInput commandInput) {
+    /**
+     * function that calls the 'addMerch' logical function and format its output
+     * */
+    public static ObjectNode addMerch(final CommandInput commandInput) {
         String message;
         String username = commandInput.getUsername();
 
@@ -435,7 +521,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode getAllUsers(CommandInput commandInput) {
+    /**
+     * function that calls the 'getAllUsers' logical function and format its output
+     * */
+    public static ObjectNode getAllUsers(final CommandInput commandInput) {
         List<String> allUsers = Admin.getAllUsers();
 
         ObjectNode objectNode = objectMapper.createObjectNode();
@@ -445,7 +534,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode deleteUser(CommandInput commandInput) {
+    /**
+     * function that calls the 'deleteUser' logical function and format its output
+     * */
+    public static ObjectNode deleteUser(final CommandInput commandInput) {
         String message = Admin.deleteUser(commandInput.getUsername());
 
         ObjectNode objectNode = objectMapper.createObjectNode();
@@ -456,7 +548,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode addPodcast(CommandInput commandInput) {
+    /**
+     * function that calls the 'addPodcast' logical function and format its output
+     * */
+    public static ObjectNode addPodcast(final CommandInput commandInput) {
         String message;
         String username = commandInput.getUsername();
 
@@ -476,7 +571,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode addAnnouncement(CommandInput commandInput) {
+    /**
+     * function that calls the 'addAnnouncement' logical function and format its output
+     * */
+    public static ObjectNode addAnnouncement(final CommandInput commandInput) {
         String message;
         String username = commandInput.getUsername();
 
@@ -497,7 +595,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode removeAnnouncement(CommandInput commandInput) {
+    /**
+     * function that calls the 'removeAnnouncement' logical function and format its output
+     * */
+    public static ObjectNode removeAnnouncement(final CommandInput commandInput) {
         String message;
         String username = commandInput.getUsername();
 
@@ -518,7 +619,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode showPodcasts(CommandInput commandInput) {
+    /**
+     * function that calls the 'showPodcasts' logical function and format its output
+     * */
+    public static ObjectNode showPodcasts(final CommandInput commandInput) {
         String username = commandInput.getUsername();
         List<PodcastOutput> result = Admin.showPodcasts(username);
 
@@ -530,7 +634,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode removeAlbum(CommandInput commandInput) {
+    /**
+     * function that calls the 'removeAlbum' logical function and format its output
+     * */
+    public static ObjectNode removeAlbum(final CommandInput commandInput) {
         String username = commandInput.getUsername();
         String message;
 
@@ -551,7 +658,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode changePage(CommandInput commandInput) {
+    /**
+     * function that calls the 'changePage' logical function and format its output
+     * */
+    public static ObjectNode changePage(final CommandInput commandInput) {
         String username = commandInput.getUsername();
         String message;
 
@@ -566,7 +676,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode removePodcast(CommandInput commandInput) {
+    /**
+     * function that calls the 'removePodcast' logical function and format its output
+     * */
+    public static ObjectNode removePodcast(final CommandInput commandInput) {
         String username = commandInput.getUsername();
         String message;
 
@@ -587,7 +700,10 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode removeEvent(CommandInput commandInput) {
+    /**
+     * function that calls the 'removeEvent' logical function and format its output
+     * */
+    public static ObjectNode removeEvent(final CommandInput commandInput) {
         String username = commandInput.getUsername();
         String message;
 
@@ -608,11 +724,22 @@ public class CommandRunner {
         return objectNode;
     }
 
-    public static ObjectNode getTop5Albums(CommandInput commandInput) {
+    /**
+     * function that calls the 'getTop5Albums logical function and format its output
+     * */
+    public static ObjectNode getTop5Albums(final CommandInput commandInput) {
         ObjectNode objectNode = objectMapper.createObjectNode();
         objectNode.put("command", commandInput.getCommand());
         objectNode.put("timestamp", commandInput.getTimestamp());
         objectNode.put("result", objectMapper.valueToTree(Admin.getTop5Albums()));
+        return objectNode;
+    }
+
+    public static ObjectNode getTop5Artists(final CommandInput commandInput) {
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        objectNode.put("command", commandInput.getCommand());
+        objectNode.put("timestamp", commandInput.getTimestamp());
+        objectNode.put("result", objectMapper.valueToTree(Admin.getTop5Artists()));
         return objectNode;
     }
 }

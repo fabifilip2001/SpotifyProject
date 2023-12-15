@@ -2,7 +2,7 @@ package app.page.system.artistPages.utils;
 
 import lombok.Getter;
 
-public class Merch {
+public final class Merch {
     @Getter
     private final String name;
     @Getter
@@ -10,7 +10,7 @@ public class Merch {
     @Getter
     private final int price;
 
-    public Merch(String name, String description, int price) {
+    public Merch(final String name, final String description, final int price) {
         this.name = name;
         this.description = description;
         this.price = price;

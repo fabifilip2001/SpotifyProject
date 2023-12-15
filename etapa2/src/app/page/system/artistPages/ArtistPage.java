@@ -9,24 +9,31 @@ import lombok.Getter;
 
 import java.util.List;
 
-public class ArtistPage extends Page {
+public final class ArtistPage extends Page {
     @Getter
     private List<Event> events;
     @Getter
     private List<Merch> merches;
 
-    public ArtistPage(User owner, List<AudioCollection> audioCollection, List<Event> events, List<Merch> merches) {
+    public ArtistPage(final User owner, final List<AudioCollection> audioCollection,
+                      final List<Event> events, final List<Merch> merches) {
         super(owner, audioCollection);
         this.events = events;
         this.merches = merches;
     }
 
-    public void updateEvents(List<Event> events) {
-        this.events = events;
+    /**
+     * function that updates an artist's events
+     * */
+    public void updateEvents(final List<Event> newEvents) {
+        this.events = newEvents;
     }
 
-    public void updateMerches(List<Merch> merches) {
-        this.merches = merches;
+    /**
+     * function thar updates an artist's merches
+     * */
+    public void updateMerches(final List<Merch> newMerches) {
+        this.merches = newMerches;
     }
     @Override
     public String print() {

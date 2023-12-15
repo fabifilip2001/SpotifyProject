@@ -18,11 +18,11 @@ public class LikedContentPage extends UserPage {
     public String print() {
         return "Liked songs:\n\t"
                 +
-                PageUtils.songsLikedContentPagePrint(getLikedSongs())
+                getLikedSongs()
                 +
                 "\n\nFollowed playlists:\n\t"
                 +
-                PageUtils.collectionLikedContentPagePrint(getAudioCollection())
+                getAudioCollection()
                 ;
     }
 }
